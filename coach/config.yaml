@@ -1,0 +1,54 @@
+# Safe to commit: no secrets here. Secrets (Anthropic key, SMTP password) come
+# from environment variables / GitHub Actions secrets, or from a git-ignored
+# coach/config.local.yaml for local runs.
+
+profile:
+  name: Sujit Silas
+  sex: male                 # male | female  (affects BMR / calorie context)
+  age: 26                   # years  — EDIT
+  height_in: 71             # inches — EDIT
+  weight_lb: 172            # lb     — EDIT (needed for protein target)
+  units: miles              # miles | km
+  body_goal: "lean and muscular with an athletic build"
+  lifting_experience: intermediate   # beginner | intermediate | advanced
+  # Free text — anything else the coach should know (injuries, equipment you
+  # have, preferences, things to avoid). Leave "" if none.
+  coaching_notes: "Give me a motivational quote at the end of each message."
+
+# Weekly template. Days are 0=Mon ... 6=Sun. The coach adapts day-to-day
+# based on recovery, but uses this to keep ~3 runs + ~3 lifts/week on track.
+schedule:
+  runs_per_week: 3
+  lifts_per_week: 3
+  run_days: [1, 3, 5]       # Tue, Thu, Sat
+  lift_days: [0, 2, 4]      # Mon, Wed, Fri
+  long_run_day: 5           # Sat
+  rest_day: 6               # Sun
+
+nutrition:
+  phase: recomp             # recomp | cut | bulk
+  protein_g_per_lb: 1.0     # 0.8-1.0 g/lb is a good muscle-building range
+  tdee_override: null       # leave null to use Garmin's measured daily burn
+  meals_per_day: 3          # how many meals to plan (e.g. 3, or 3 + snack)
+  # >>> EDIT THIS <<< Tell the coach how you eat so it suggests real meals you'd
+  # actually make — foods you keep at home, things you cook, cuisines you like,
+  # restrictions/allergies, schedule (e.g. skip breakfast), eating out, coffee.
+  food_notes: |
+    I cook a simple food at home.
+    Usually have: eggs, Greek yogurt, cotage cheese, chicken, beef, salmon sweet potatoes, tofu, rice,
+    peanut butter, bananas, whey protein. Coffee in the morning. I purchase meat, fruits, and veggies, from Ralphs.
+    Often eat out for lunch or dinner on 1 or 2 weekdays close to UCLA.
+
+anthropic:
+  api_key: ""               # set via ANTHROPIC_API_KEY secret / config.local.yaml
+  model: claude-sonnet-4-6    # claude-sonnet-4-6 is cheaper if you prefer
+
+delivery:
+  provider: email                        # email | callmebot | twilio
+  email:
+    to: "sujitsilas@gmail.com"
+    from: "sujitsilas@gmail.com"
+    username: "sujitsilas@gmail.com"     # the Gmail account that sends it
+    password: ""              # set via SMTP_PASSWORD secret / config.local.yaml
+    smtp_host: smtp.gmail.com
+    smtp_port: 587

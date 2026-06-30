@@ -9,7 +9,7 @@ targets** — tuned to your goal of a lean, muscular, athletic build on a 3-run 
 ## How it works
 
 ```
-fetch_data.py  →  build_briefing.py  →  Claude (Opus 4.8)  →  email (Gmail SMTP)
+fetch_data.py  →  build_briefing.py  →  Claude (Opus/Sonnet)  →  email (Gmail SMTP)
 (Garmin data)     (objective signals)   (coaching decision)    (the message)
 ```
 
@@ -49,8 +49,21 @@ cp coach/config.example.yaml coach/config.yaml
 ```
 
 Edit `coach/config.yaml` — especially **age, height, weight** (needed for the
-protein/calorie math) and your **weekly run/lift days**. `config.yaml` is
-git-ignored.
+protein/calorie math), your **weekly run/lift days**, and **`food_notes`** (how
+you eat, so the meal plan uses foods you actually have).
+
+`config.yaml` contains **no secrets**, so it's safe to commit. Secrets (Anthropic
+key, SMTP password) come from environment variables / GitHub secrets, or from a
+git-ignored **`coach/config.local.yaml`** for local runs:
+
+```yaml
+# coach/config.local.yaml  (git-ignored — merged over config.yaml)
+anthropic:
+  api_key: "sk-ant-..."
+delivery:
+  email:
+    password: "your gmail app password"
+```
 
 ### 3. Set up email (Gmail App Password)
 
@@ -59,8 +72,8 @@ SMTP — create an **App Password**:
 
 1. Turn on 2-Step Verification: <https://myaccount.google.com/security>.
 2. Create an App Password: <https://myaccount.google.com/apppasswords> (pick "Mail").
-3. Put the 16-character password in `config.yaml` under `delivery.email.password`
-   (or, better, set the `SMTP_PASSWORD` env var and leave the file blank).
+3. Put the 16-character password in `config.local.yaml` (`delivery.email.password`)
+   for local runs, and as the `SMTP_PASSWORD` GitHub secret for the cloud run.
 
 The `to`/`from`/`username` are already set to `sujitsilas@gmail.com`. Prefer a
 different SMTP provider? Change `smtp_host`/`smtp_port` in `config.yaml`.
@@ -68,7 +81,7 @@ different SMTP provider? Change `smtp_host`/`smtp_port` in `config.yaml`.
 ### 4. Get an Anthropic API key
 
 Create one at <https://console.anthropic.com> → set it as `ANTHROPIC_API_KEY`
-(preferred) or in `config.yaml`. A daily run costs about a cent or two.
+(preferred) or in `config.local.yaml`. A daily run costs about a cent or two.
 
 ### 5. Test it
 
@@ -94,14 +107,15 @@ laptop is off. Push your fork to GitHub, then add these **repository secrets**
 | `GARMIN_TOKEN_B64` | base64 of your saved Garmin token (command below) |
 | `ANTHROPIC_API_KEY` | your Anthropic key |
 | `SMTP_PASSWORD` | your Gmail App Password |
-| `COACH_CONFIG` | the full contents of your `coach/config.yaml` |
+
+(`config.yaml` is committed, so the runner reads your profile/food notes straight
+from the repo — no `COACH_CONFIG` secret needed.)
 
 Generate the token secret value without printing it to your screen:
 
 ```bash
 base64 -i ~/.garminconnect/garmin_tokens.json | pbcopy   # now paste into the secret
 ```
-
 Trigger a manual run from the **Actions** tab → *Daily Garmin Coach* → *Run
 workflow* to test before relying on the schedule.
 
@@ -137,5 +151,9 @@ independent.)
 
 ## Privacy
 
-`config.yaml`, `reports/`, and your Garmin token are git-ignored. Your health
-data and secrets are never committed.
+`config.yaml` is committable but holds **no secrets** — secrets live in the
+git-ignored `config.local.yaml` (local) or GitHub secrets (cloud). `reports/`,
+the dashboard `data/`, and your Garmin token are also git-ignored, so your health
+data and secrets are never committed. Note: committing `config.yaml` puts your
+profile (age, weight, food notes) in the repo — keep your fork private if that
+matters to you.

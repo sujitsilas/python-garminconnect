@@ -1,4 +1,4 @@
-# Secrets + personal config + generated reports — never commit
-config.yaml
+# config.yaml is committable (no secrets). Local secrets + reports are not.
+config.local.yaml
 reports/
 *.local

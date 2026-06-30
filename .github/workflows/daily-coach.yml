@@ -1,0 +1,56 @@
+name: Daily Garmin Coach
+
+# Emails a personalized daily training + nutrition plan.
+# Runs in the cloud, so it fires even when your laptop is off.
+
+on:
+  schedule:
+    # 14:00 UTC ≈ 7:00am Pacific (PDT) / 6:00am (PST). GitHub cron is always UTC.
+    - cron: "0 14 * * *"
+  workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
+
+concurrency:
+  group: daily-coach
+  cancel-in-progress: false
+
+jobs:
+  coach:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install curl_cffi pandas -r coach/requirements.txt
+
+      - name: Restore Garmin session token
+        env:
+          GARMIN_TOKEN_B64: ${{ secrets.GARMIN_TOKEN_B64 }}
+        run: |
+          mkdir -p ~/.garminconnect
+          printf '%s' "$GARMIN_TOKEN_B64" | base64 -d > ~/.garminconnect/garmin_tokens.json
+          test -s ~/.garminconnect/garmin_tokens.json
+
+      - name: Cache Garmin raw day files (incremental fetch)
+        uses: actions/cache@v4
+        with:
+          path: dashboard/data/raw
+          key: garmin-raw-${{ github.run_id }}
+          restore-keys: |
+            garmin-raw-
+
+      - name: Fetch latest Garmin data
+        run: python dashboard/fetch_data.py --days 120 --history-days 180 --refresh-today
+
+      - name: Generate plan and send via email
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: python coach/coach.py --no-refresh

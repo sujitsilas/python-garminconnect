@@ -80,11 +80,25 @@ OUTPUT RULES — this is an EMAIL, so:
 """
 
 
+def _deep_merge(base: dict, over: dict) -> dict:
+    for k, v in (over or {}).items():
+        if isinstance(v, dict) and isinstance(base.get(k), dict):
+            _deep_merge(base[k], v)
+        else:
+            base[k] = v
+    return base
+
+
 def load_config() -> dict:
     path = HERE / "config.yaml"
     if not path.exists():
         sys.exit("coach/config.yaml not found. Copy config.example.yaml and fill it in.")
     cfg = yaml.safe_load(path.read_text())
+
+    # Local secret overrides (git-ignored); env vars still win over both.
+    local = HERE / "config.local.yaml"
+    if local.exists():
+        _deep_merge(cfg, yaml.safe_load(local.read_text()) or {})
 
     # env overrides for secrets
     cfg.setdefault("anthropic", {})
