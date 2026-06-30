@@ -1,0 +1,5 @@
+# Personal Garmin data — never commit
+data/
+*.csv
+*.json
+!.gitkeep

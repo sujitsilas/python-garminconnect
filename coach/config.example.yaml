@@ -1,0 +1,58 @@
+# Copy this file to coach/config.yaml and fill in the values.
+# config.yaml is git-ignored (it holds personal stats + secrets).
+
+profile:
+  name: Sujit
+  sex: male                 # male | female  (affects BMR / calorie context)
+  age: 27                   # years  — EDIT
+  height_in: 70             # inches — EDIT
+  weight_lb: 165            # lb     — EDIT (needed for protein target)
+  units: miles              # miles | km
+  body_goal: "lean and muscular with an athletic build"
+  lifting_experience: intermediate   # beginner | intermediate | advanced
+  coaching_notes: ""        # free text: injuries, equipment, preferences, things to avoid
+
+# Weekly template. Days are 0=Mon ... 6=Sun. The coach adapts day-to-day
+# based on recovery, but uses this to keep ~3 runs + ~3 lifts/week on track.
+schedule:
+  runs_per_week: 3
+  lifts_per_week: 3
+  run_days: [1, 3, 5]       # Tue, Thu, Sat
+  lift_days: [0, 2, 4]      # Mon, Wed, Fri
+  long_run_day: 5           # Sat
+  rest_day: 6               # Sun
+
+nutrition:
+  phase: recomp             # recomp | cut | bulk
+  protein_g_per_lb: 1.0     # 0.8-1.0 g/lb is a good muscle-building range
+  tdee_override: null       # leave null to use Garmin's measured daily burn
+  meals_per_day: 3          # how many meals to plan (e.g. 3, or 3 + snack)
+  # Tell the coach how you eat so it suggests real meals you'd actually make —
+  # foods you keep at home, things you cook, cuisines, restrictions/allergies,
+  # schedule (e.g. skip breakfast), eating out, coffee/alcohol.
+  food_notes: |
+    EDIT ME: e.g. I cook Indian food + simple high-protein bowls. Usually have
+    eggs, Greek yogurt, oats, chicken, paneer, tofu, rice, lentils, frozen veg,
+    peanut butter, bananas, whey. Coffee in the morning. No beef/pork.
+
+anthropic:
+  api_key: ""               # or set env ANTHROPIC_API_KEY (preferred)
+  model: claude-opus-4-8    # claude-sonnet-4-6 is cheaper if you prefer
+
+delivery:
+  provider: email           # email | callmebot | twilio
+  email:
+    to: "you@gmail.com"     # where the daily plan is sent — EDIT
+    from: "you@gmail.com"
+    username: "you@gmail.com"   # Gmail account that sends it — EDIT
+    password: ""            # Gmail App Password — or set env SMTP_PASSWORD
+    smtp_host: smtp.gmail.com
+    smtp_port: 587
+  callmebot:                # only if provider: callmebot (WhatsApp)
+    phone: "+1XXXXXXXXXX"
+    apikey: ""
+  twilio:                   # only if provider: twilio
+    to: "whatsapp:+1XXXXXXXXXX"
+    from: "whatsapp:+14155238886"
+    account_sid: ""
+    auth_token: ""

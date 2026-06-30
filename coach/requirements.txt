@@ -1,0 +1,5 @@
+# Coach pipeline deps (in addition to the garminconnect package itself)
+anthropic>=0.45
+pyyaml>=6.0
+requests>=2.28
+pandas>=2.0
