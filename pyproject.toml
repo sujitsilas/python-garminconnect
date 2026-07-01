@@ -124,6 +124,8 @@ exclude = [
     "dist",
     "tests",
     "test_data",
+    "dashboard",  # personal Streamlit/data-fetch scripts, not the shipped library
+    "coach",      # personal coaching scripts, not the shipped library
 ]
 
 [tool.ruff.lint]
