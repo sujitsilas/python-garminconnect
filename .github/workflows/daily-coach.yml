@@ -5,8 +5,8 @@ name: Daily Garmin Coach
 
 on:
   schedule:
-    # 14:00 UTC ≈ 7:00am Pacific (PDT) / 6:00am (PST). GitHub cron is always UTC.
-    - cron: "0 14 * * *"
+    # 13:37 UTC ≈ 6:37 am
+    - cron: "37 13 * * *"
   workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
 
 concurrency:
