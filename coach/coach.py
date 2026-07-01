@@ -147,7 +147,11 @@ def generate_message(cfg: dict, briefing: dict) -> str:
 
     resp = client.messages.create(
         model=model,
-        max_tokens=4000,   # room for adaptive thinking + the meal plan
+        # With adaptive thinking, max_tokens is the COMBINED budget for thinking
+        # + visible text. 4000 was too tight: at effort=medium the thinking alone
+        # consumed it all and the model stopped (max_tokens) before writing the
+        # message. 16000 leaves ample room for thinking plus the ~2200-char reply.
+        max_tokens=16000,
         thinking={"type": "adaptive"},
         output_config={"effort": "medium"},
         system=SYSTEM_PROMPT,
