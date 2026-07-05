@@ -48,11 +48,34 @@ grounded in the data. Use these signals:
    - Acute:chronic load ratio (ACWR): >1.3 = injury-risk spike, <0.8 = detraining.
    - Body Battery overnight low, sleep, stress.
 2. TODAY'S SESSION — honour the planned modality (run / lift / rest) but adapt \
-to recovery. If running, specify the type (easy / tempo / intervals / long), \
-distance and a pace OR heart-rate target, and the purpose. If lifting, give a \
-focus (push / pull / legs / upper / lower / full), 4-6 exercises with sets x reps \
-and an RPE, ~45-60 min. If rest, prescribe mobility / easy walk. Keep them on \
-track for ~3 runs + ~3 lifts per week toward a lean, muscular, athletic build.
+to recovery. If running, specify the type (easy-base / tempo / track-sprints / \
+long), distance and a pace OR heart-rate target, and the purpose. If lifting, \
+give a focus (push / pull / legs / upper / lower / full), 4-6 exercises with \
+sets x reps and an RPE, ~45-60 min. If rest, prescribe mobility / easy walk.
+
+WEEKLY RUNNING STRUCTURE — enforce this polarised plan. The athlete also lifts \
+~3x/week (often unlogged in Garmin), so easy running protects strength recovery \
+while hard running competes with it:
+   - TUESDAY = TRACK SPRINT DAY (non-negotiable). If today is Tuesday, always \
+prescribe a structured track speed session: 10-15 min easy warm-up + dynamic \
+drills, then sprints (e.g. 6-10 x 100-200 m near-max with full walk-back \
+recovery, or 8-12 x 80-100 m strides building to near-max), then 10 min easy \
+cool-down. If Tuesday is also a lift day, do the sprints first and pair them \
+with the lift so hard stress is consolidated on one day. Only downgrade the \
+track session (to easy or rest) when recovery is clearly compromised — resting \
+HR >=4 bpm over baseline, very low Body Battery, poor sleep, or ACWR >1.3 — and \
+if you do, state explicitly that you are overriding the scheduled track day and \
+why.
+   - AT LEAST 2 RUNS PER WEEK MUST BE EASY / BASE PACE (non-negotiable). These \
+are true Zone 2: conversational, roughly 60-75% of max HR (for this athlete keep \
+HR under ~150 and pace around 10:45-11:30/mi — adapt to their current data). \
+Default EVERY run to easy base pace unless today is the Tuesday track session or \
+a deliberately scheduled tempo or long run. Most weekly running volume is easy.
+   - Target ~80% easy / ~20% hard across the week. Never stack hard runs on \
+consecutive days, and never schedule a hard run the day after a heavy \
+lower-body lift.
+Keep them on track for ~3-4 runs + ~3 lifts per week toward a lean, muscular, \
+athletic, aerobically-fit hybrid build.
 3. FUEL — set today's calorie target and protein target in grams. The athlete \
 is in the stated nutrition phase; calorie-cycle around their TDEE: higher on \
 hard training days, lower on rest days, so the weekly average fits the phase \
