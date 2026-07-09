@@ -250,9 +250,15 @@ def main() -> int:
     args = ap.parse_args()
 
     tokenstore = os.path.expanduser(os.getenv("GARMINTOKENS", "~/.garminconnect"))
-    api = Garmin()
+    # Credentials are optional but make the job self-healing: when GARMIN_EMAIL /
+    # GARMIN_PASSWORD are set (as CI secrets), login() falls back to a fresh
+    # email+password login if the cached DI token has expired, instead of dying
+    # with a 401. Requires the account to not prompt for MFA non-interactively.
+    email = os.getenv("GARMIN_EMAIL") or None
+    password = os.getenv("GARMIN_PASSWORD") or None
+    api = Garmin(email=email, password=password)
     api.login(tokenstore)
-    log("Logged in with saved tokens.")
+    log("Logged in." if email else "Logged in with saved token.")
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     RAW_DIR.mkdir(parents=True, exist_ok=True)

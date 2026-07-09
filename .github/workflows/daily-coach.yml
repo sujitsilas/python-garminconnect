@@ -30,13 +30,17 @@ jobs:
           pip install -e .
           pip install curl_cffi pandas -r coach/requirements.txt
 
-      - name: Restore Garmin session token
+      - name: Restore Garmin session token (optional — speeds up login)
         env:
           GARMIN_TOKEN_B64: ${{ secrets.GARMIN_TOKEN_B64 }}
         run: |
           mkdir -p ~/.garminconnect
-          printf '%s' "$GARMIN_TOKEN_B64" | base64 -d > ~/.garminconnect/garmin_tokens.json
-          test -s ~/.garminconnect/garmin_tokens.json
+          if [ -n "$GARMIN_TOKEN_B64" ]; then
+            printf '%s' "$GARMIN_TOKEN_B64" | base64 -d > ~/.garminconnect/garmin_tokens.json
+            echo "Restored cached Garmin token."
+          else
+            echo "No GARMIN_TOKEN_B64 set — will log in with GARMIN_EMAIL/GARMIN_PASSWORD."
+          fi
 
       - name: Cache Garmin raw day files (incremental fetch)
         uses: actions/cache@v4
@@ -47,6 +51,9 @@ jobs:
             garmin-raw-
 
       - name: Fetch latest Garmin data
+        env:
+          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: python dashboard/fetch_data.py --days 120 --history-days 180 --refresh-today
 
       - name: Generate plan and send via email
